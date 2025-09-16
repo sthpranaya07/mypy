@@ -1,3 +1,5 @@
+# ===== WARNING: THIS PROGRAM STILL HAS SOME MINOR ERRORS =====
+
 from tabulate import tabulate
 from random import choice
 from os import system
