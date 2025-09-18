@@ -42,6 +42,8 @@ def main():
     system('cls')
 
     while True:
+        pass
+
         events = ["found_treasure", "encountered_danger", "nothing"]
         display()
         user_choice = input("Enter your choice: ").strip()
@@ -61,13 +63,21 @@ def main():
                 elif event == events[1]:
                     lost_health = randint(5, 13)
                     player_health -= lost_health
-                    event1 = f"A sudden {map[where_to_explore.lower()]["danger"]} struck unexpectedly, causing {player_name} to lose {lost_health} health!\n"
-                    animate(event1)
-                    press_enter()
+                    if player_health > 0:
+                        event1 = f"A sudden {map[where_to_explore.lower()]["danger"]} struck unexpectedly, causing {player_name} to lose {lost_health} health!\n"
+                        animate(event1)
+                        press_enter()
+                    else:
+                        message = f"{player_name}'s final heartbeat echoes through the void.\n"
+                        animate(message)
+                        sleep(2)
+                        break
                 elif event == events[2]:
                     event2 = f"{player_name} searched every corner but came up empty-handed.\n"
                     animate(event2)
                     press_enter()
+            else:
+                pass
         elif user_choice == '2':
             show_stats(player_name, player_health, player_inventory)
             press_enter()
