@@ -1,0 +1,12 @@
+{
+  "forest": {"treasure": "gold coin", "danger": "snake"},
+  "cave": {"treasure": "diamond", "danger": "bat"},
+  "town": {"treasure": "silver coin", "danger": "wild cat"},
+  "mountain": {"treasure": "ancient amulet", "danger": "rockslide"},
+  "river": {"treasure": "sapphire", "danger": "crocodile"},
+  "castle": {"treasure": "royal crown", "danger": "guard dog"},
+  "desert": {"treasure": "treasure map", "danger": "sandstorm"},
+  "swamp": {"treasure": "mystic pearl", "danger": "swamp worm"},
+  "island": {"treasure": "ancient chest", "danger": "tribal boar"},
+  "ruins": {"treasure": "old scroll", "danger": "falling debris"}
+}
