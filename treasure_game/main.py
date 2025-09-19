@@ -133,7 +133,7 @@ def show_stats(name, health, inv):
         counts[items] = counts.get(items, 0) + 1
 
     for key, value in counts.items():
-        print(f"  • {key}  x {value}")
+        print(f"  • {key:<14}  x {value:>1}")
 
     print("─────────────────────────")
 
