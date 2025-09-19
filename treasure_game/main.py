@@ -12,21 +12,21 @@ def main():
         while True:
             new_or_load_game = input("<1> New game\n<2> Load game\n -> ").strip()
 
-            if new_or_load_game == '1':
-                player_name = input("Enter your name: ").strip().title()
-                player_health = player_data["health"]
-                player_inventory = []
-                system('cls')
-                break
-            elif new_or_load_game == '2':
-                player_name = player_data["name"]
-                player_health = player_data["health"]
-                player_inventory = player_data["inventory"]
-                system('cls')
-                break
-            else:
-                pass
-                system('cls')
+            match new_or_load_game:
+                case '1':
+                    player_name = input("Enter your name: ").strip().title()
+                    player_health = player_data["health"]
+                    player_inventory = []
+                    system('cls')
+                    break
+                case '2':
+                    player_name = player_data["name"]
+                    player_health = player_data["health"]
+                    player_inventory = player_data["inventory"]
+                    system('cls')
+                    break
+                case _:
+                    system('cls')
 
     with open('map.json', 'r') as file:
         map = load(file)
@@ -35,104 +35,89 @@ def main():
         for areas in map.keys():
             locations.append(areas.title())
 
-    welcome = f"Welcome, {player_name}. Prepare yourself for the journey ahead.\n"
-    animate(welcome)
+    animate(f"Welcome, {player_name}. Prepare yourself for the journey ahead.")
     enter_to_continue = input("Press enter to continue...")
     sleep(1.5)
     system('cls')
 
     while True:
-        pass
-
         events = ["found_treasure", "encountered_danger", "nothing"]
-        display()
+        print("<1> Explore the areas\n<2> View stats\n<3> Save progress\n<4> Exit the game")
         user_choice = input("Enter your choice: ").strip()
         system('cls')
 
-        if user_choice == '1':
-            show_areas(locations)
-            where_to_explore = input("Where do u want to explore?\n -> ").strip().title()
-            system('cls')
-            if where_to_explore in locations:
-                event = choice(events)
-                if event == events[0]:
-                    player_inventory.append(map[where_to_explore.lower()]["treasure"])
-                    event0 = f"{player_name} stumbled upon {map[where_to_explore.lower()]["treasure"]}.\n"
-                    animate(event0)
-                    press_enter()
-                elif event == events[1]:
-                    lost_health = randint(5, 13)
-                    player_health -= lost_health
-                    if player_health > 0:
-                        event1 = f"A sudden {map[where_to_explore.lower()]["danger"]} struck unexpectedly, causing {player_name} to lose {lost_health} health!\n"
-                        animate(event1)
+        match user_choice:
+            case '1':
+                show_areas(locations)
+                where_to_explore = input("Where do u want to explore?\n -> ").strip().title()
+                system('cls')
+                if where_to_explore in locations:
+                    event = choice(events)
+                    match event:
+                        case "found_treasure":
+                            player_inventory.append(map[where_to_explore.lower()]["treasure"])
+                            animate(f"{player_name} stumbled upon {map[where_to_explore.lower()]["treasure"]}.")
+                            press_enter()
+                        case "encountered_danger":
+                            lost_health = randint(5, 13)
+                            player_health -= lost_health
+                            if player_health > 0:
+                                animate(f"A sudden {map[where_to_explore.lower()]["danger"]} struck unexpectedly, causing {player_name} to lose {lost_health} health!")
+                                press_enter()
+                            else:
+                                animate(f"{player_name}'s final heartbeat echoes through the void.")
+                                sleep(2)
+                                break
+                        case "nothing":
+                            animate(f"{player_name} searched every corner but came up empty-handed.")
+                            press_enter()
+                else:
+                    pass
+            case '2':
+                show_stats(player_name, player_health, player_inventory)
+                press_enter()
+            case '3':
+                animate("⚠️  Warning: This action may overwrite your current progress.")
+                yes_or_no = input("Proceed anyway? (y/n): ").strip().lower()
+
+                match yes_or_no:
+                    case 'y':
+                        player_data["name"] = player_name
+                        player_data["health"] = player_health
+                        player_data["inventory"] = player_inventory
+                        
+                        with open('player.json', 'w') as file:
+                            dump(player_data, file, indent=4)
+
+                        animate("Your progress has been saved!")
                         press_enter()
-                    else:
-                        message = f"{player_name}'s final heartbeat echoes through the void.\n"
-                        animate(message)
-                        sleep(2)
-                        break
-                elif event == events[2]:
-                    event2 = f"{player_name} searched every corner but came up empty-handed.\n"
-                    animate(event2)
+                    case 'n':
+                        animate("The chapter remains unrecorded.")
+                        press_enter()
+                    case _:
+                        system('cls')
+            case '4':
+                animate("The echoes of adventure begin to fade.")
+                yes_or_no = input("Proceed anyway? (y/n): ").strip().lower()
+
+                if yes_or_no == 'y':
+                    animate(f"May your next journey be even greater {player_name}.")
+                    sleep(1)
+                    break
+                elif yes_or_no == 'n':
+                    animate(f"You chose to stay. Let the adventure continue {player_name}.")
                     press_enter()
-            else:
+                else:
+                    pass
+                    system('cls')
+            case _:
                 pass
-        elif user_choice == '2':
-            show_stats(player_name, player_health, player_inventory)
-            press_enter()
-        elif user_choice == '3':
-            warning_msg = "⚠️  Warning: This action may overwrite your current progress.\n"
-            animate(warning_msg)
-            yes_or_no = input("Proceed anyway? (y/n): ").strip().lower()
-
-            if yes_or_no == 'y':
-                player_data["name"] = player_name
-                player_data["health"] = player_health
-                player_data["inventory"] = player_inventory
-                
-                with open('player.json', 'w') as file:
-                    dump(player_data, file, indent=4)
-
-                saved = "Your progress has been saved!\n"
-                animate(saved)
-                press_enter()
-            elif yes_or_no == 'n':
-                unsaved = f"The chapter remains unrecorded.\n"
-                animate(unsaved)
-                press_enter()
-            else:
-                pass
-                system('cls')
-        elif user_choice == '4':
-            warning_msg = "The echoes of adventure begin to fade.\n"
-            animate(warning_msg)
-            yes_or_no = input("Proceed anyway? (y/n): ").strip().lower()
-
-            if yes_or_no == 'y':
-                message = f"May your next journey be even greater {player_name}.\n"
-                animate(message)
-                sleep(1)
-                break
-            elif yes_or_no == 'n':
-                message = f"You chose to stay. Let the adventure continue {player_name}.\n"
-                animate(message)
-                press_enter()
-            else:
-                pass
-                system('cls')
-        else:
-            pass
-
-
-def display():
-    print("<1> Explore the areas\n<2> View stats\n<3> Save progress\n<4> Exit the game")
 
 
 def show_areas(array):
     print("===== AVAILABLE AREAS =====")
     for areas in array:
-        print(f"❖ {areas.title()}")
+        print(f"❖ {areas}")
 
 
 def press_enter():
@@ -154,9 +139,10 @@ def show_stats(name, health, inv):
 
 
 def animate(string):
-    for chars in string:
-        print(f"{chars}", end="", flush=True)
+    for char in string:
+        print(char, end="", flush=True)
         sleep(0.05)
+    print()
 
 
 if __name__ == "__main__":
