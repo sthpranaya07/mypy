@@ -100,16 +100,16 @@ def main():
                 animate("The echoes of adventure begin to fade.")
                 yes_or_no = input("Proceed anyway? (y/n): ").strip().lower()
 
-                if yes_or_no == 'y':
-                    animate(f"May your next journey be even greater {player_name}.")
-                    sleep(1)
-                    break
-                elif yes_or_no == 'n':
-                    animate(f"You chose to stay. Let the adventure continue {player_name}.")
-                    press_enter()
-                else:
-                    pass
-                    system('cls')
+                match yes_or_no:
+                    case 'y':
+                        animate(f"May your next journey be even greater {player_name}.")
+                        sleep(1)
+                        break
+                    case 'n':
+                        animate(f"You chose to stay. Let the adventure continue {player_name}.")
+                        press_enter()
+                    case _:
+                        system('cls')
             case _:
                 pass
 
